@@ -138,6 +138,7 @@ class MyGame(arcade.Window):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.ASH_GREY)
 
+
     def setup(self):
         # Создаём SpriteList для разных типов объектов
         self.player_list = arcade.SpriteList()
@@ -147,9 +148,10 @@ class MyGame(arcade.Window):
         # Создаём игрока
         self.player = Hero()
         self.player_list.append(self.player)
+        
 
         # Добавляем звук выстрела — и игра автоматически становится на 20% лучше!
-        self.shoot_sound = arcade.load_sound(":resources:/sounds/laser1.wav")
+        self.shoot_sound = arcade.load_sound("sound/пистолет.mp3")
         
         self.keys_pressed = set()
 
