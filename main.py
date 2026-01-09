@@ -23,13 +23,14 @@ class Hero(arcade.Sprite):
         self.health = 100
         
         # Загрузка текстур
-        self.idle_texture = arcade.load_texture(":resources:/images/animated_characters/male_person/malePerson_idle.png")
+        self.idle_texture = arcade.load_texture("pictures/anim/стоять на месте.png")
         self.texture = self.idle_texture
         
         self.walk_textures = []
-        for i in range(0, 8):
-            texture = arcade.load_texture(f":resources:/images/animated_characters/male_person/malePerson_walk{i}.png")
-            self.walk_textures.append(texture)
+        texture = arcade.load_texture("pictures/anim/идти в право 1.png")
+        self.walk_textures.append(texture)
+        texture = arcade.load_texture("pictures/anim/идти в право 2.png")
+        self.walk_textures.append(texture)
             
         self.current_texture = 0
         self.texture_change_time = 0
@@ -103,11 +104,14 @@ class Hero(arcade.Sprite):
 
 
 class Bullet(arcade.Sprite):
+    __texture = arcade.load_texture("pictures/photo/missile.png")
+
     def __init__(self, start_x, start_y, target_x, target_y, speed=800, damage=10):
         super().__init__()
-        self.texture = arcade.load_texture(":resources:/images/space_shooter/laserBlue01.png")
+        self.texture = self.__texture
         self.center_x = start_x
         self.center_y = start_y
+        self.scale = 0.1
         self.speed = speed
         self.damage = damage
         
