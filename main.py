@@ -1,6 +1,7 @@
 import arcade
 import math
 import enum
+import random
 
 # Делаем класс для направления взгляда персонажа,
 # это позволит не запутаться в чиселках и сделать код более читаемым
@@ -9,8 +10,8 @@ class FaceDirection(enum.Enum):
     RIGHT = 1
 
 # Задаём размеры окна
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 2000
+SCREEN_HEIGHT = 1500
 SCREEN_TITLE = "Спрайтовый герой"
 
 class Hero(arcade.Sprite):
@@ -141,6 +142,10 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.ASH_GREY)
+        self.all_sprites = arcade.SpriteList()
+        self.tail = 16
+        self.player_sprite = Hero()
+        self.collision_list = list()
 
 
     def setup(self):
@@ -148,6 +153,20 @@ class MyGame(arcade.Window):
         self.player_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.player_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
+        map_name = "текстуры/карта1.tmx"
+        tile_map = arcade.load_tilemap(map_name, scaling=self.tail)
+
+
+        self.wall_list = tile_map.sprite_lists["Слой тайлов 2"]
+        self.chests_list = tile_map.sprite_lists["Слой тайлов 1"]
+        self.collision_list.append(self.wall_list)
+
+
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player_sprite, self.collision_list
+        )
         
         # Создаём игрока
         self.player = Hero()
@@ -165,6 +184,9 @@ class MyGame(arcade.Window):
         self.wall_list.draw()
         self.player_list.draw()
         self.bullet_list.draw()
+        self.wall_list.draw()
+        self.chests_list.draw()
+
 
     def on_update(self, delta_time):
         # Обновляем все списки (кроме неподвижных стен)
