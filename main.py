@@ -10,14 +10,14 @@ class FaceDirection(enum.Enum):
     RIGHT = 1
 
 # Задаём размеры окна
-SCREEN_WIDTH = 2000
-SCREEN_HEIGHT = 1500
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 1100
 SCREEN_TITLE = "Спрайтовый герой"
 
 class Hero(arcade.Sprite):
     def __init__(self):
         super().__init__()
-        
+
         # Основные характеристики
         self.scale = 1.0
         self.speed = 300
@@ -94,10 +94,6 @@ class Hero(arcade.Sprite):
             self.face_direction = FaceDirection.LEFT
         elif dx > 0:
             self.face_direction = FaceDirection.RIGHT
-        
-        # Ограничение в пределах экрана
-        self.center_x = max(self.width/2, min(SCREEN_WIDTH - self.width/2, self.center_x))
-        self.center_y = max(self.height/2, min(SCREEN_HEIGHT - self.height/2, self.center_y))
 
         # Проверка на движение
         self.is_walking = dx or dy
@@ -140,58 +136,70 @@ class Bullet(arcade.Sprite):
 
 class MyGame(arcade.Window):
     def __init__(self, width, height, title):
-        super().__init__(width, height, title)
+        super().__init__(width, height, title, fullscreen=True)
         arcade.set_background_color(arcade.color.ASH_GREY)
+        self.world_camera = arcade.camera.Camera2D()
+        self.world_camera.zoom = 2
         self.all_sprites = arcade.SpriteList()
-        self.tail = 16
         self.player_sprite = Hero()
         self.collision_list = list()
+        self.map_width = 50
+        self.map_height = 50
+        self.tile_size = 32
 
 
     def setup(self):
         # Создаём SpriteList для разных типов объектов
-        self.player_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
         map_name = "текстуры/карта1.tmx"
-        tile_map = arcade.load_tilemap(map_name, scaling=self.tail)
+        
+        scale_x = self.width / (self.map_width * self.tile_size)
+        scale_y = self.height / (self.map_height * self.tile_size)
+        scale = min(scale_x, scale_y)
+        tile_map = arcade.load_tilemap(map_name, scaling=self.scale)
 
 
         self.wall_list = tile_map.sprite_lists["Слой тайлов 2"]
         self.chests_list = tile_map.sprite_lists["Слой тайлов 1"]
         self.collision_list.append(self.wall_list)
-
-
-        self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player_sprite, self.collision_list
-        )
         
         # Создаём игрока
         self.player = Hero()
         self.player_list.append(self.player)
-        
 
-        # Добавляем звук выстрела — и игра автоматически становится на 20% лучше!
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, self.collision_list
+        )
         self.shoot_sound = arcade.load_sound("sound/пистолет.mp3")
         
         self.keys_pressed = set()
 
     def on_draw(self):
         self.clear()
-        # Рисуем все списки в правильном порядке
+        self.world_camera.use()
+        self.chests_list.draw()
         self.wall_list.draw()
         self.player_list.draw()
         self.bullet_list.draw()
-        self.wall_list.draw()
-        self.chests_list.draw()
 
 
     def on_update(self, delta_time):
         # Обновляем все списки (кроме неподвижных стен)
         self.player_list.update(delta_time, self.keys_pressed)
         self.bullet_list.update()
+        self.physics_engine.update()
+        position = (
+            self.player.center_x,
+            self.player.center_y
+        )
+        CAMERA_LERP = 0.15
+        self.world_camera.position = arcade.math.lerp_2d(  # Изменяем позицию камеры
+            self.world_camera.position,
+            position,
+            CAMERA_LERP,  # Плавность следования камеры
+        )
         
         # Обновляем анимации игрока
         self.player_list.update_animation()
