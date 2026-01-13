@@ -24,13 +24,13 @@ class Hero(arcade.Sprite):
         self.health = 100
         
         # Загрузка текстур
-        self.idle_texture = arcade.load_texture("pictures/anim/стоять на месте.png")
+        self.idle_texture = arcade.load_texture("pictures/anim/скелет/стоять на месте.png")
         self.texture = self.idle_texture
         
         self.walk_textures = []
-        texture = arcade.load_texture("pictures/anim/идти в право 1.png")
+        texture = arcade.load_texture("pictures/anim/скелет/идти в право 1.png")
         self.walk_textures.append(texture)
-        texture = arcade.load_texture("pictures/anim/идти в право 2.png")
+        texture = arcade.load_texture("pictures/anim/скелет/идти в право 2.png")
         self.walk_textures.append(texture)
             
         self.current_texture = 0
