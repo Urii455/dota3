@@ -113,6 +113,12 @@ class MyGame(arcade.Window):
                 self.score += 1
                 self.slime_list.append(Slime(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)))
                 arcade.play_sound(self.slime_dead_sound, volume=1)
+        
+        for slime in self.slime_list:
+            hit_wall = arcade.check_for_collision_with_list(slime, self.wall_list) # делаю так что бы слизни не спавнились в стенах
+            if hit_wall:
+                slime.remove_from_sprite_lists()
+                self.slime_list.append(Slime(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)))
 
         self.lable_score.text = f"Score: {self.score}"
 
