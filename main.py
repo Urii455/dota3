@@ -5,8 +5,7 @@ import enum
 import random
 from classes import Hero, Bullet, Slime
 
-# Делаем класс для направления взгляда персонажа,
-# это позволит не запутаться в чиселках и сделать код более читаемым
+
 class FaceDirection(enum.Enum):
     LEFT = 0
     RIGHT = 1
@@ -35,7 +34,6 @@ class MyGame(arcade.Window):
 
 
     def setup(self):
-        # Создаём SpriteList для разных типов объектов
         self.wall_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
@@ -52,7 +50,6 @@ class MyGame(arcade.Window):
         self.chests_list = tile_map.sprite_lists["Слой тайлов 1"]
         self.collision_list.append(self.wall_list)
         
-        # Создаём игрока
         self.player = Hero()
         self.player_list.append(self.player)
         for _ in range(20):
@@ -147,7 +144,7 @@ class MyGame(arcade.Window):
 
 def main():
     game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    game.setup()  # Запускаем начальную настройку игры
+    game.setup()
     arcade.run()
 
 
