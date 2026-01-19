@@ -53,7 +53,13 @@ class MyGame(arcade.Window):
         self.player = Hero()
         self.player_list.append(self.player)
         for _ in range(20):
-            self.slime_list.append(Slime(random.randint(0, self._width), random.randint(0, self._height)))
+            self.slime_list.append(Slime(random.randint(50, SCREEN_WIDTH), random.randint(110, SCREEN_HEIGHT - 100)))
+            for slime in self.slime_list:
+                hit_wall = arcade.check_for_collision_with_list(slime, self.wall_list) # делаю так что бы слизни не спавнились в стенах
+                if hit_wall:
+                    slime.remove_from_sprite_lists()
+                    self.slime_list.append(Slime(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)))
+            
 
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player, self.collision_list
@@ -108,14 +114,14 @@ class MyGame(arcade.Window):
             if hit_slime:
                 slime.remove_from_sprite_lists()
                 self.score += 1
-                self.slime_list.append(Slime(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)))
+                self.slime_list.append(Slime(random.randint(110, SCREEN_HEIGHT - 100), random.randint(50, SCREEN_WIDTH)))
                 arcade.play_sound(self.slime_dead_sound, volume=1)
+                for slime in self.slime_list:
+                    hit_wall = arcade.check_for_collision_with_list(slime, self.wall_list) # делаю так что бы слизни не спавнились в стенах
+                    if hit_wall:
+                        slime.remove_from_sprite_lists()
+                        self.slime_list.append(Slime(random.randint(110, SCREEN_HEIGHT - 100), random.randint(50, SCREEN_WIDTH)))
         
-        for slime in self.slime_list:
-            hit_wall = arcade.check_for_collision_with_list(slime, self.wall_list) # делаю так что бы слизни не спавнились в стенах
-            if hit_wall:
-                slime.remove_from_sprite_lists()
-                self.slime_list.append(Slime(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)))
 
         self.lable_score.text = f"Score: {self.score}"
 
