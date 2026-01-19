@@ -111,16 +111,13 @@ class Bullet(arcade.Sprite):
         self.speed = speed
         self.damage = damage
         
-        # Рассчитываем направление
         x_diff = target_x - start_x
         y_diff = target_y - start_y
         angle = math.atan2(y_diff, x_diff)
-        # И скорость
+
         self.change_x = math.cos(angle) * speed
         self.change_y = math.sin(angle) * speed
-        # Если текстура ориентирована по умолчанию вправо, то поворачиваем пулю в сторону цели
-        # Для другой ориентации нужно будет подправить угол
-        self.angle = math.degrees(-angle)  # Поворачиваем пулю
+        self.angle = math.degrees(-angle)  # Поворот пули
         
     def update(self, delta_time):
         # Удаляем пулю, если она ушла за экран

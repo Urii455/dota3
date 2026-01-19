@@ -70,6 +70,7 @@ class MyGame(arcade.Window):
         self.keys_pressed = set()
         self.lable_score = arcade.Text(f"Score: {self.score}", 125, 50, batch=self.batch, font_size=50, color=arcade.color.WHITE,
                                         anchor_x="center", anchor_y="center")
+                                        
 
     def on_draw(self):
         self.clear()
@@ -123,6 +124,7 @@ class MyGame(arcade.Window):
                         self.slime_list.append(Slime(random.randint(110, SCREEN_HEIGHT - 100), random.randint(50, SCREEN_WIDTH)))
         
 
+        
         self.lable_score.text = f"Score: {self.score}"
 
     def on_mouse_press(self, x, y, button, modifiers):
