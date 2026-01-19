@@ -31,6 +31,7 @@ class MyGame(arcade.Window):
         self.tile_size = 32
         self.score = 0
         self.batch = Batch()
+        self.health = 100
 
 
     def setup(self):
@@ -87,10 +88,13 @@ class MyGame(arcade.Window):
 
 
     def on_update(self, delta_time):
-        # Обновляем все списки (кроме неподвижных стен)
         self.player_list.update(delta_time, self.keys_pressed)
         self.physics_engine.update()
-        self.slime_list.update()
+        
+        # Слизень двигается к игроку
+        for slime in self.slime_list:
+            slime.follow_player(self.player, delta_time, self.wall_list)
+        
         position = (
             self.player.center_x,
             self.player.center_y
@@ -102,6 +106,7 @@ class MyGame(arcade.Window):
             CAMERA_LERP,  # Плавность
         )
         self.player_list.update_animation()
+        
         for bullet in self.bullet_list:
             bullet.update(delta_time)
         
@@ -123,9 +128,8 @@ class MyGame(arcade.Window):
                         slime.remove_from_sprite_lists()
                         self.slime_list.append(Slime(random.randint(110, SCREEN_HEIGHT - 100), random.randint(50, SCREEN_WIDTH)))
         
-
-        
         self.lable_score.text = f"Score: {self.score}"
+            
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:

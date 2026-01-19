@@ -20,7 +20,7 @@ class Hero(arcade.Sprite):
         # Основные характеристики
         self.scale = 1.0
         self.speed = 250
-        self.health = 100
+        self.health = 100   
         
         # Загрузка текстур
         self.idle_texture = arcade.load_texture("pictures/anim/скелет/стоять на месте.png")
@@ -130,10 +130,47 @@ class Bullet(arcade.Sprite):
 
 
 class Slime(arcade.Sprite):
-    def __init__(self, x, y, speed=100, damage=10):
+    def __init__(self, x, y, speed=50, damage=10):  # Уменьшил скорость для реалистичности
         super().__init__(scale=0.1)
         self.texture = arcade.load_texture("pictures/anim/слизень/slime.png")
         self.speed = speed
         self.damage = damage
         self.center_x = x
         self.center_y = y
+        
+    def follow_player(self, player, delta_time, wall_list):
+        """Движение к игроку с проверкой столкновений"""
+        # Вычисление куда идти
+        dx = player.center_x - self.center_x
+        dy = player.center_y - self.center_y
+        
+        distance = math.sqrt(dx**2 + dy**2)
+        if distance > 0:
+            dx = dx / distance
+            dy = dy / distance
+            old_x = self.center_x
+            old_y = self.center_y
+            
+            # Слизень двигается
+            self.center_x += dx * self.speed * delta_time
+            self.center_y += dy * self.speed * delta_time
+            
+            # Проверяем столкновение со стенами
+            hit_wall = arcade.check_for_collision_with_list(self, wall_list)
+            if hit_wall:
+                self.center_x = old_x
+                self.center_y = old_y
+                
+                # Пробуем двигаться только по X
+                self.center_x = old_x + dx * self.speed * delta_time
+                self.center_y = old_y
+                hit_wall_x = arcade.check_for_collision_with_list(self, wall_list)
+                if hit_wall_x:
+                    self.center_x = old_x
+                
+                # Пробуем двигаться только по Y
+                self.center_x = old_x
+                self.center_y = old_y + dy * self.speed * delta_time
+                hit_wall_y = arcade.check_for_collision_with_list(self, wall_list)
+                if hit_wall_y:
+                    self.center_y = old_y
