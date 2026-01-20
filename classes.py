@@ -137,6 +137,7 @@ class Slime(arcade.Sprite):
         self.damage = damage
         self.center_x = x
         self.center_y = y
+        self.health = 100
         
     def follow_player(self, player, delta_time, wall_list):
         dx = player.center_x - self.center_x

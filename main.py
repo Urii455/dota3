@@ -31,7 +31,8 @@ class MyGame(arcade.Window):
         self.tile_size = 32
         self.score = 0
         self.batch = Batch()
-        self.health = 100
+        self.health = 1000
+
 
 
     def setup(self):
@@ -127,6 +128,13 @@ class MyGame(arcade.Window):
                     if hit_wall:
                         slime.remove_from_sprite_lists()
                         self.slime_list.append(Slime(random.randint(110, SCREEN_HEIGHT - 100), random.randint(50, SCREEN_WIDTH)))
+        
+        player_damage = arcade.check_for_collision_with_list(self.player, self.slime_list)
+        if player_damage:
+            self.health -= 10
+            if self.health == 0:
+                arcade.close_window()
+                print('Вы проиграли скоро здесь будет главное меню))')
         
         self.lable_score.text = f"Score: {self.score}"
             
