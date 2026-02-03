@@ -146,7 +146,6 @@ class MyGame(arcade.Window):
             self.lable_score2.text = f"health: {self.health}"   # выводим хп
             if self.health == 0:
                 arcade.close_window()
-                print('Вы проиграли скоро здесь будет главное меню))')
         
         self.lable_score.text = f"Score: {self.score}"  # выводим счёт
 
@@ -182,4 +181,4 @@ def main2():
 
 
 if __name__ == "__main__":
-    main()
+    main2()
