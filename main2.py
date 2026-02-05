@@ -6,6 +6,8 @@ import random
 from classes import Hero, Bullet, Slime
 
 
+A = None
+
 class FaceDirection(enum.Enum):
     LEFT = 0
     RIGHT = 1

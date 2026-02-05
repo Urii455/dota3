@@ -5,7 +5,10 @@ from PyQt6.QtWidgets import QLabel, QLineEdit
 from main import main
 from main2 import main2
 
-class Arifmometr(QWidget):
+
+A = None
+
+class menu(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -15,15 +18,21 @@ class Arifmometr(QWidget):
         self.setGeometry(100, 100, 330, 400)
         self.setWindowTitle('главное меню')
 
-        self.add_button = QPushButton('1 карта', self)
-        self.add_button.move(100, 10)
-        self.add_button.resize(60, 40)
-        self.add_button.clicked.connect(self.game1)
+        self.map1 = QPushButton('1 карта', self)
+        self.map1.move(100, 10)
+        self.map1.resize(60, 40)
+        self.map1.clicked.connect(self.game1)
 
-        self.substract_button = QPushButton('2 карта', self)
-        self.substract_button.move(170, 10)
-        self.substract_button.resize(60, 40)
-        self.substract_button.clicked.connect(self.game2)
+        self.map2 = QPushButton('2 карта', self)
+        self.map2.move(170, 10)
+        self.map2.resize(60, 40)
+        self.map2.clicked.connect(self.game2)
+
+        self.first_value = QLineEdit(self)
+        self.first_value.move(145, 60)
+        self.first_value.resize(self.first_value.sizeHint())
+        self.first_value.resize(50, 20)
+        self.first_value.setText('20')
 
 
 
@@ -38,6 +47,6 @@ class Arifmometr(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Arifmometr()
+    ex = menu()
     ex.show()
     sys.exit(app.exec())
