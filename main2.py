@@ -23,7 +23,7 @@ class FaceDirection(enum.Enum):
 # Задаём размеры окна
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 720
-SCREEN_TITLE = "Спрайтовый герой"
+SCREEN_TITLE = "карта 2"
 
 
 
@@ -174,12 +174,11 @@ class MyGame(arcade.Window):
                 self.start_invincibility(0.7)
                 self.lable_score2.text = f"health: {self.health}"   # выводим хп
                 if self.health == 0:
-                    arcade.stop_sound()
                     arcade.close_window()
             else:
                 self.lable_score2.text = f"health: {self.health}"   # выводим хп
 
-            
+        self.lable_score.text = f"Score: {self.score}"  # выводим счёт
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == arcade.MOUSE_BUTTON_LEFT:
@@ -199,8 +198,7 @@ class MyGame(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         self.keys_pressed.add(key)
-        if key == arcade.key.KEY_0 or key == arcade.key.NUM_0:
-            arcade.stop_sound()
+        if key == arcade.key.ESCAPE:
             arcade.close_window()
         
     def on_key_release(self, key, modifiers):
